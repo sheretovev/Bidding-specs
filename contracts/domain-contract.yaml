@@ -1,0 +1,89 @@
+# Machine-readable distillation of domain/*.md — the subset of the spec worth diffing in CI.
+# This file is the "practical" reference: state names, event names, and flags a platform's
+# own code/tests can assert against without parsing prose. It is generated/maintained by hand
+# today; if the backend (PurpleUnity) publishes its own OpenAPI/Swagger schema, that schema is
+# authoritative for exact field types — this file exists to pin down the *behavioral* meaning
+# of that schema's enums, which a raw OpenAPI doc doesn't capture (e.g. "which of these states
+# accept bids").
+#
+# spec_version tracks this repo's tag (see /VERSION and /CHANGELOG.md).
+
+spec_version: "0.1.0"
+
+lot_running_states:
+  Not Running:
+    accepts_bids: false
+    spec_ref: SPEC-LOT-001
+  Running:
+    accepts_bids: true
+    applicable_increment_field: incrementPrice
+    spec_ref: SPEC-LOT-001
+  Extended:
+    accepts_bids: true
+    applicable_increment_field: extendedIncrementPrice
+    fallback_increment_field: incrementPrice
+    spec_ref: [SPEC-LOT-001, SPEC-EXT-002]
+  Finished:
+    accepts_bids: false
+    spec_ref: SPEC-LOT-001
+  Paused:
+    accepts_bids: false
+    note: "Defensive/unconfirmed-reachable state. Fail closed like any unrecognized value."
+    spec_ref: SPEC-LOT-003
+  unknown_state_default:
+    accepts_bids: false
+    spec_ref: SPEC-LOT-003
+
+auction_type_modes:
+  open:
+    match: "type.name contains 'open' (case-insensitive) — prefer backend discriminator if/when available"
+    bidding_history_visible: true
+    max_bid_supported: true
+    spec_ref: SPEC-AUC-002
+  non_open:
+    match: "anything not matching 'open'"
+    bidding_history_visible: false
+    max_bid_supported: false
+    spec_ref: SPEC-AUC-002
+
+max_bid_states:
+  # Open-ended vocabulary — do not treat as exhaustive. See SPEC-MAX-002.
+  known_values: [Active, Paused, Ended, Won]
+  leading_condition: "state == 'Active' AND amount >= lot.currentHighestBid"
+  spec_ref: [SPEC-MAX-002, SPEC-MAX-003]
+
+bid_placement:
+  minimum_next_bid_formula: "(currentHighestBid OR lot.startingBidPrice) + applicableIncrement"
+  spec_ref: [SPEC-BID-001, SPEC-BID-002, SPEC-BID-003]
+
+reserve_price:
+  disclosed_field: isReservedPriceMet   # boolean/null only — never the reserve figure itself
+  gates_bidding: false
+  spec_ref: SPEC-RES-001
+
+buy_now:
+  field: buyNowPrice
+  implemented_as_purchase_action: false   # display-only in both platforms as of this version
+  spec_ref: SPEC-RES-003
+
+realtime_channel:
+  hub_path_suffix: /auction-engine/publicAuctionEngineHub
+  subscribe_target: onHighestBidUpdate
+  protocol: signalr-json
+  reconciliation:
+    discard_if_older_than_current: true
+    prefer_most_recent_of: [last_rest_fetch_timestamp, last_push_created_at]
+    own_action_is_floor_until_confirmed: true
+  spec_ref: [SPEC-RT-001, SPEC-RT-002, SPEC-RT-003, SPEC-RT-004]
+
+identity:
+  provider: azure-ad-b2c-msal
+  anonymous_allowed_for: [browse_auctions, browse_lots, view_bidding_history_open_auctions]
+  requires_signin_for: [place_bid, place_max_bid, my_bids, my_max_bids, sales_orders]
+  bearer_token_in_url: forbidden
+  spec_ref: [SPEC-AUTH-001, SPEC-AUTH-002, SPEC-AUTH-003]
+
+multi_tenancy:
+  scoping_unit: public_environment
+  required_on_every_call: true
+  spec_ref: SPEC-I18N-001
