@@ -4,6 +4,24 @@ All notable changes to this spec are recorded here, per version, naming the affe
 IDs so a platform maintainer can scan for relevance without reading full diffs. See
 `GOVERNANCE.md` §3 for what qualifies as MAJOR/MINOR/PATCH.
 
+## [Unreleased]
+
+### Added
+
+- `conformance/audit-2026-08-31.md` — a full, verified rule-by-rule conformance audit of
+  both `bidding-web` and `bidding-app` against every rule in `domain/*.md`, done by tracing
+  actual code paths (not the partial sampling `v0.1.0`'s platform notes were based on).
+  Headline: neither platform fully conforms, and the gaps are largely non-overlapping —
+  iOS is stronger on lifecycle gating, anti-sniping, and real-time reconciliation; web is
+  stronger on fulfillment, max-bid leading status, and bidder-identity masking. See the
+  audit's prioritized punch list for recommended fix order.
+
+### Changed
+
+- `platform-notes/web.md` and `platform-notes/ios.md` rewritten against the new audit —
+  several rules the initial version marked "conforms" (notably web's SPEC-LOT-002/
+  SPEC-BID-001, entirely unimplemented rather than imperfect) were corrected.
+
 ## [0.1.0] - 2026-08-29
 
 Initial version. Establishes the spec repo and distills the bidding domain rules observed
