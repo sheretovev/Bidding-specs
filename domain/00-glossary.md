@@ -7,7 +7,9 @@ different display labels, but internal identifiers and docs should map onto thes
 |---|---|
 | **Auction** | A scheduled event with a start/end window that groups one or more Lots for bidding. Has an `Auction Type` (see `domain/01-auction-lifecycle.md`) and a visibility window distinct from its bidding window. |
 | **Lot** | A single biddable item (or bundle of Assets) within an Auction. Has its own pricing (starting bid, increment, buy-now, reserve) and its own Running State — a Lot's bidding window can differ per-lot within the same Auction. |
-| **Asset** | The underlying real-world item(s) a Lot represents (e.g. a vehicle, a property). A Lot may bundle multiple Assets. Asset cataloguing/taxonomy is out of scope for this spec except where it affects bidding (it doesn't). |
+| **Asset** | The underlying real-world item(s) a Lot represents (e.g. a vehicle, a property). A Lot may bundle multiple Assets. |
+| **Taxonomy / Category** | A node in the hierarchical classification tree Assets are tagged with (e.g. "Vehicles" → "Trucks"). Used as the home screen's browsing categories — see `domain/11-home-category-browsing.md`. Otherwise, general asset cataloguing is out of scope for this spec. |
+| **Icon Name** | An abstract, platform-agnostic string a Taxonomy node's `icon` field carries (e.g. `"helicopter"`), mapped to an actual glyph independently by each platform. See `contracts/taxonomy-icon-map.md`. |
 | **Bid** | A single, standing offer placed by a Bidder on a Lot for a specific amount. Bids are ascending-only: a new Bid must exceed the current highest by at least the applicable increment. |
 | **Max Bid** (proxy bid) | A ceiling amount a Bidder authorizes the system to bid up to, automatically, on their behalf as competing Bids arrive. See `domain/04-max-bid-proxy-bidding.md`. |
 | **Highest Bid / Leading Bid** | The current winning Bid amount on a Lot at a point in time. |
@@ -38,3 +40,4 @@ Rules in `domain/*.md` are numbered as `SPEC-<AREA>-<NNN>`. Areas in use:
 | `SPEC-FUL` | Post-auction fulfillment |
 | `SPEC-AUTH` | Identity & access |
 | `SPEC-I18N` | Currency & multi-tenancy |
+| `SPEC-CAT` | Home category browsing |

@@ -40,6 +40,13 @@ Bid submission errors surface as structured validation errors (e.g. a `propertyN
 "bid failed" message, since the common case (amount below the current minimum) is
 self-explanatory once shown.
 
+## Taxonomy / Category browsing
+
+| Call | Purpose | Spec refs |
+|---|---|---|
+| `GET /query/.../taxonomies?depth=2` | Top-level categories plus one level of children — the source for home screen category tiles and the qualifying-id set used to filter lots. | SPEC-CAT-001, SPEC-CAT-004 |
+| `POST /search-engine/.../search/lots` with `assets/any(a: a/taxonomy/id eq '{id}')` OR'd per qualifying id, `filter`'d together with the Ending Soon clause, `orderBy: ["extendedEndDate asc", "endDate asc"]` | Category-filtered (or unfiltered) Ending Soon lots. | SPEC-CAT-004, SPEC-CAT-005 |
+
 ## Fulfillment (Sales Orders)
 
 | Call | Purpose | Spec refs |

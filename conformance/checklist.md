@@ -83,6 +83,20 @@ scenarios are "does it actually behave this way."
 - [ ] Comment attachments render inline for images, as a labeled link otherwise, and history
       is paginated. (SPEC-FUL-003)
 
+## Home category browsing
+
+- [ ] Category tiles render a default fallback glyph when `icon` is absent or unmapped —
+      never a broken image or an empty slot. (SPEC-CAT-002)
+- [ ] Selecting a category re-scopes the home screen's own Ending Soon list in place; it does
+      not navigate away to a separate browse page. (SPEC-CAT-003)
+- [ ] The qualifying filter for a selected category includes the category's own id and its
+      fetched direct children's ids (not exact-match only). (SPEC-CAT-004)
+- [ ] The Ending Soon query used on the category-filtered list is character-for-character the
+      same query used when no category is selected, just with the category clause added —
+      not a second, independently-maintained query. (SPEC-CAT-005)
+- [ ] Category tiles and the Ending Soon list sit above any personalized bidding-status
+      content on the home screen, for every visitor. (SPEC-CAT-006)
+
 ## Currency & tenancy
 
 - [ ] Every amount is rendered with the currency from the *same record*, never a hardcoded

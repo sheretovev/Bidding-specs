@@ -8,6 +8,20 @@ IDs so a platform maintainer can scan for relevance without reading full diffs. 
 
 ### Added
 
+- `domain/11-home-category-browsing.md` (`SPEC-CAT-001`..`006`) — home screen category tiles
+  sourced from taxonomy, acting as a live filter on a canonical "Ending Soon" lots query
+  (running/extended only, soonest-closing first). Neither platform fully implemented this
+  before now; ports to both as part of the same change that added this spec section.
+- `contracts/taxonomy-icon-map.md` — the shared, explicitly-provisional icon-name vocabulary
+  and per-platform glyph mapping, with a mandatory default-fallback rule.
+- `decisions/0003-home-category-browsing.md` — records the subtree-matching approximation
+  (category + fetched direct children only, pending backend schema confirmation for deeper
+  matching) and the section-ordering call (category browsing above personalized bid status).
+- Glossary: added Taxonomy/Category and Icon Name terms, removed the earlier "taxonomy is
+  out of scope" line now that it's a first-class spec area.
+
+### Added
+
 - `conformance/audit-2026-08-31.md` — a full, verified rule-by-rule conformance audit of
   both `bidding-web` and `bidding-app` against every rule in `domain/*.md`, done by tracing
   actual code paths (not the partial sampling `v0.1.0`'s platform notes were based on).
